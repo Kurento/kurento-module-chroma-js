@@ -4,7 +4,7 @@ Copyright © 2013-2014 Kurento. Licensed under [LGPL License].
 
 kurento-module-chroma
 ============
-
+Chroma Detector Filter
 
 
 What is Kurento

@@ -1,6 +1,6 @@
 {
   "name": "kurento-module-chroma",
-  "version": "Kurento/kurento-module-chroma-js#develop",
+  "version": "0.0.1-dev",
   "description": "Chroma Detector Filter",
   "homepage": "http://www.kurento.com",
   "main": "lib/index.js",
@@ -11,8 +11,7 @@
     "url": "Kurento/kurento-module-chroma-js"
   },
   "bugs": {
-    "url": "Kurento/kurento-module-chroma-js/issues",
-    "email": "info@kurento.com"
+    "email": "kurento@googlegroups.com"
   },
   "keywords": [
     "API",

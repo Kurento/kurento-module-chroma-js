@@ -1,6 +1,6 @@
 {
   "name": "chroma",
-  "version": "1.0.3-dev",
+  "version": "1.0.3",
   "kurentoVersion": "^5.0.0",
   "imports": [
     {
@@ -28,13 +28,13 @@
         "nodeName": "kurento-module-chroma",
         "npmDescription": "Chroma Detector Filter",
         "npmGit": "Kurento/kurento-module-chroma-js",
-        "npmVersion": "Kurento/kurento-module-chroma-js#develop"
+        "npmVersion": "1.0.3"
       },
       "java": {
         "mavenGroupId": "org.kurento.module",
         "packageName": "org.kurento.module.chroma",
         "mavenArtifactId": "chroma",
-        "mavenVersion": "1.0.3-SNAPSHOT"
+        "mavenVersion": "1.0.3"
       }
     },
     "implementation": {

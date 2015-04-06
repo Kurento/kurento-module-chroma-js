@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/lgpl-2.1.html
  *
  * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  *
@@ -16,38 +16,28 @@
 
 module.exports = function(grunt)
 {
-  var DIST_DIR = 'dist';
+  var DIST_DIR = 'dist'
 
-  var pkg = grunt.file.readJSON('package.json');
+  var pkg = grunt.file.readJSON('package.json')
+
+  var bower =
+  {
+    TOKEN:      process.env.TOKEN,
+    repository: 'git://github.com/Kurento/<%= pkg.name %>-bower.git'
+  }
 
   // Project configuration.
-  grunt.initConfig({
-    pkg: pkg,
+  grunt.initConfig(
+  {
+    pkg:   pkg,
+    bower: bower,
 
     // Plugins configuration
     clean:
     {
-      'doc': '<%= jsdoc.all.dest %>',
+      generated_code: DIST_DIR,
 
-      'browser': DIST_DIR,
-      'code': 'lib'
-    },
-
-    // Check if Kurento Module Creator exists
-    'path-check':
-    {
-      'generate plugin': {
-        src: 'kurento-module-creator',
-        options: {
-          tasks: ['shell:kmd']
-        }
-      }
-    },
-
-    bower:
-    {
-      TOKEN:      process.env.TOKEN,
-      repository: 'Kurento/kurento-module-chroma-js'
+      generated_doc: '<%= jsdoc.all.dest %>'
     },
 
     // Generate documentation
@@ -67,17 +57,16 @@ module.exports = function(grunt)
     // Generate browser versions and mapping debug file
     browserify:
     {
-      options: {
-        external: ['kurento-client']
-      },
-
-      'require':
+      require:
       {
         src:  '<%= pkg.main %>',
-        dest: DIST_DIR+'/<%= pkg.name %>_require.js'
+        dest: DIST_DIR+'/<%= pkg.name %>_require.js',
+        options: {
+          external: ['kurento-client']
+        }
       },
 
-      'standalone':
+      standalone:
       {
         src:  '<%= pkg.main %>',
         dest: DIST_DIR+'/<%= pkg.name %>.js',
@@ -85,7 +74,8 @@ module.exports = function(grunt)
         options: {
           browserifyOptions: {
             standalone: '<%= pkg.name %>',
-          }
+          },
+          external: ['kurento-client']
         }
       },
 
@@ -105,7 +95,8 @@ module.exports = function(grunt)
                compressPath: DIST_DIR,
                map: '<%= pkg.name %>.map'
              }]
-          ]
+          ],
+          external: ['kurento-client']
         }
       },
 
@@ -127,7 +118,8 @@ module.exports = function(grunt)
                map: '<%= pkg.name %>.map',
                output: DIST_DIR+'/<%= pkg.name %>.map'
              }]
-          ]
+          ],
+          external: ['kurento-client']
         }
       }
     },
@@ -145,50 +137,33 @@ module.exports = function(grunt)
           ],
           overrides: {
             authors: (pkg.author ? [pkg.author] : []).concat(pkg.contributors || []),
-            ignore: ['doc/', 'lib/', 'Gruntfile.js', 'package.json'],
-            main: DIST_DIR+'/<%= pkg.name %>.js'
+            main: 'js/<%= pkg.name %>.js'
           }
         }
       }
     },
 
+    // Publish / update package info in Bower
     shell:
     {
-      // Publish / update package info in Bower
       bower: {
         command: [
           'curl -X DELETE "https://bower.herokuapp.com/packages/<%= pkg.name %>?auth_token=<%= bower.TOKEN %>"',
           'node_modules/.bin/bower register <%= pkg.name %> <%= bower.repository %>',
           'node_modules/.bin/bower cache clean'
         ].join('&&')
-      },
-
-      // Generate the Kurento Javascript client
-      kmd: {
-        command: [
-          'mkdir -p ./lib',
-          'kurento-module-creator --delete'
-          +' --templates node_modules/kurento-client/templates'
-          +' --deprom node_modules/kurento-client-core/src'
-          +' --deprom node_modules/kurento-client-elements/src'
-          +' --deprom node_modules/kurento-client-filters/src'
-          +' --rom ./src --codegen ./lib'
-        ].join('&&')
       }
     }
-  });
+  })
 
   // Load plugins
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-path-check');
-  grunt.loadNpmTasks('grunt-shell');
-
-  grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-jsdoc');
-  grunt.loadNpmTasks('grunt-npm2bower-sync');
+  grunt.loadNpmTasks('grunt-browserify')
+  grunt.loadNpmTasks('grunt-contrib-clean')
+  grunt.loadNpmTasks('grunt-jsdoc')
+  grunt.loadNpmTasks('grunt-npm2bower-sync')
+  grunt.loadNpmTasks('grunt-shell')
 
   // Alias tasks
-  grunt.registerTask('generate', ['path-check:generate plugin', 'browserify']);
-  grunt.registerTask('default',  ['clean', 'jsdoc', 'generate', 'sync:bower']);
-  grunt.registerTask('bower',    ['shell:bower']);
-};
+  grunt.registerTask('default', ['clean', 'jsdoc', 'browserify'])
+  grunt.registerTask('bower',   ['sync:bower', 'shell:bower'])
+}

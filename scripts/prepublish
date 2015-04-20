@@ -30,7 +30,7 @@ exists('node_modules/grunt', function(found)
   if(!found)
     exists('lib', function(found)
     {
-      if(!found)
+//      if(!found)
       {
         npm.load(function(error)
         {
@@ -63,7 +63,7 @@ exists('node_modules/grunt', function(found)
       {
         peerDependencies:
         {
-          "kurento-client": "Kurento/kurento-client-js"
+          "kurento-client": "^5.0.0"
         }
       }
 

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright 2014-2015 Kurento (http://kurento.org/)
+ * (C) Copyright 2014 Kurento (http://kurento.org/)
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser General Public License
@@ -7,7 +7,7 @@
  * http://www.gnu.org/licenses/lgpl-2.1.html
  *
  * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * but WITHOUT ANY WARRANTY without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  *
@@ -16,27 +16,28 @@
 
 module.exports = function(grunt)
 {
-  var DIST_DIR = 'dist';
+  var DIST_DIR = 'dist'
 
-  var pkg = grunt.file.readJSON('package.json');
+  var pkg = grunt.file.readJSON('package.json')
 
-  const PKG_BROWSER = 'lib/browser.js';
+  var bower =
+  {
+    TOKEN:      process.env.TOKEN,
+    repository: 'git://github.com/Kurento/<%= pkg.name %>-bower.git'
+  }
 
   // Project configuration.
-  grunt.initConfig({
-    pkg: pkg,
+  grunt.initConfig(
+  {
+    pkg:   pkg,
+    bower: bower,
 
     // Plugins configuration
     clean:
     {
-      'doc':     '<%= jsdoc.all.dest %>',
-      'browser': DIST_DIR
-    },
+      generated_code: DIST_DIR,
 
-    bower:
-    {
-      TOKEN:      process.env.TOKEN,
-      repository: 'Kurento/kurento-module-chroma-js'
+      generated_doc: '<%= jsdoc.all.dest %>'
     },
 
     // Generate documentation
@@ -56,26 +57,32 @@ module.exports = function(grunt)
     // Generate browser versions and mapping debug file
     browserify:
     {
-      options: {
-        alias:    ['.:<%= pkg.name %>'],
-        external: [
-          'es6-promise',
-          'inherits',
-          'kurento-client',
-          'promisecallback'
-        ]
+      require:
+      {
+        src:  '<%= pkg.main %>',
+        dest: DIST_DIR+'/<%= pkg.name %>_require.js',
+        options: {
+          external: ['kurento-client']
+        }
       },
 
-      'standard':
+      standalone:
       {
-        src:  PKG_BROWSER,
-        dest: DIST_DIR+'/<%= pkg.name %>.js'
+        src:  '<%= pkg.main %>',
+        dest: DIST_DIR+'/<%= pkg.name %>.js',
+
+        options: {
+          browserifyOptions: {
+            standalone: '<%= pkg.name %>',
+          },
+          external: ['kurento-client']
+        }
       },
 
-      'minified':
+      'require minified':
       {
-        src:  PKG_BROWSER,
-        dest: DIST_DIR+'/<%= pkg.name %>.min.js',
+        src:  '<%= pkg.main %>',
+        dest: DIST_DIR+'/<%= pkg.name %>_require.min.js',
 
         options:
         {
@@ -86,10 +93,33 @@ module.exports = function(grunt)
             ['minifyify',
              {
                compressPath: DIST_DIR,
-               map:          '<%= pkg.name %>.map',
-               output:       DIST_DIR+'/<%= pkg.name %>.map'
+               map: '<%= pkg.name %>.map'
              }]
-          ]
+          ],
+          external: ['kurento-client']
+        }
+      },
+
+      'standalone minified':
+      {
+        src:  '<%= pkg.main %>',
+        dest: DIST_DIR+'/<%= pkg.name %>.min.js',
+
+        options:
+        {
+          browserifyOptions: {
+            debug: true,
+            standalone: '<%= pkg.name %>'
+          },
+          plugin: [
+            ['minifyify',
+             {
+               compressPath: DIST_DIR,
+               map: '<%= pkg.name %>.map',
+               output: DIST_DIR+'/<%= pkg.name %>.map'
+             }]
+          ],
+          external: ['kurento-client']
         }
       }
     },
@@ -107,16 +137,15 @@ module.exports = function(grunt)
           ],
           overrides: {
             authors: (pkg.author ? [pkg.author] : []).concat(pkg.contributors || []),
-            ignore: ['doc/', 'lib/', 'Gruntfile.js', 'package.json'],
-            main: DIST_DIR+'/<%= pkg.name %>.js'
+            main: 'js/<%= pkg.name %>.js'
           }
         }
       }
     },
 
+    // Publish / update package info in Bower
     shell:
     {
-      // Publish / update package info in Bower
       bower: {
         command: [
           'curl -X DELETE "https://bower.herokuapp.com/packages/<%= pkg.name %>?auth_token=<%= bower.TOKEN %>"',
@@ -125,16 +154,16 @@ module.exports = function(grunt)
         ].join('&&')
       }
     }
-  });
+  })
 
   // Load plugins
-  grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-contrib-clean');
-  grunt.loadNpmTasks('grunt-jsdoc');
-  grunt.loadNpmTasks('grunt-npm2bower-sync');
-  grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-browserify')
+  grunt.loadNpmTasks('grunt-contrib-clean')
+  grunt.loadNpmTasks('grunt-jsdoc')
+  grunt.loadNpmTasks('grunt-npm2bower-sync')
+  grunt.loadNpmTasks('grunt-shell')
 
   // Alias tasks
-  grunt.registerTask('default', ['clean', 'jsdoc', 'browserify', 'sync:bower']);
-  grunt.registerTask('bower',   ['shell:bower']);
-};
+  grunt.registerTask('default', ['clean', 'jsdoc', 'browserify'])
+  grunt.registerTask('bower',   ['sync:bower', 'shell:bower'])
+}

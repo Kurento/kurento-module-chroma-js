@@ -1,6 +1,6 @@
 {
   "name": "kurento-module-chroma",
-  "version": "6.2.0",
+  "version": "6.2.1-dev",
   "description": "Chroma Detector Filter",
   "main": "lib/index.js",
   "repository": {

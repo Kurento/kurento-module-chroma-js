@@ -12,7 +12,7 @@ kurento-module-chroma-js
 
 This repository host the auto-generated JavaScript client for [Kurento] module "chroma".
 
-Module "chroma" description: Chroma Detector Filter
+Module "chroma" description: JavaScript Client API for Kurento Media Server
 
 What is Kurento
 ---------------

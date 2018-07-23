@@ -13,7 +13,7 @@ kurento-module-chroma-bower
 This repository host the auto-generated JavaScript client for [Kurento]
 module "chroma" to be published in [Bower].
 
-Module "chroma" description: Chroma Detector Filter
+Module "chroma" description: JavaScript Client API for Kurento Media Server
 
 What is Kurento
 ---------------

@@ -1,24 +1,24 @@
 {
   "name": "chroma",
-  "version": "6.18.1-dev",
-  "kurentoVersion": "^6.18.1-dev",
+  "version": "7.0.0-dev",
+  "kurentoVersion": "^7.0.0-dev",
   "imports": [
     {
       "name": "core",
-      "version": "^6.18.1-dev",
-      "mavenVersion": "[6.18.1-SNAPSHOT,7.0.0-SNAPSHOT)",
+      "version": "^7.0.0-dev",
+      "mavenVersion": "[7.0.0-SNAPSHOT,8.0.0-SNAPSHOT)",
       "npmVersion": "https://github.com/Kurento/kurento-client-core-js.git"
     },
     {
       "name": "elements",
-      "version": "^6.18.1-dev",
-      "mavenVersion": "[6.18.1-SNAPSHOT,7.0.0-SNAPSHOT)",
+      "version": "^7.0.0-dev",
+      "mavenVersion": "[7.0.0-SNAPSHOT,8.0.0-SNAPSHOT)",
       "npmVersion": "https://github.com/Kurento/kurento-client-elements-js.git"
     },
     {
       "name": "filters",
-      "version": "^6.18.1-dev",
-      "mavenVersion": "[6.18.1-SNAPSHOT,7.0.0-SNAPSHOT)",
+      "version": "^7.0.0-dev",
+      "mavenVersion": "[7.0.0-SNAPSHOT,8.0.0-SNAPSHOT)",
       "npmVersion": "https://github.com/Kurento/kurento-client-filters-js.git"
     }
   ],
@@ -33,7 +33,7 @@
       "java": {
         "mavenGroupId": "org.kurento.module",
         "mavenArtifactId": "chroma",
-        "mavenVersion": "6.18.1-SNAPSHOT",
+        "mavenVersion": "7.0.0-SNAPSHOT",
         "packageName": "org.kurento.module.chroma"
       }
     },

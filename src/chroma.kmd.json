@@ -1,6 +1,6 @@
 {
   "name": "chroma",
-  "version": "7.2.1-dev",
+  "version": "7.3.0",
   "kurentoVersion": "^7.1.0",
   "imports": [
     {
@@ -28,12 +28,12 @@
         "nodeName": "kurento-module-chroma",
         "npmDescription": "JavaScript Client API for Kurento Media Server",
         "npmGit": "https://github.com/Kurento/kurento-module-chroma-js.git",
-        "npmVersion": "https://github.com/Kurento/kurento-module-chroma-js.git"
+        "npmVersion": "7.3.0"
       },
       "java": {
         "mavenGroupId": "org.kurento.module",
         "mavenArtifactId": "chroma",
-        "mavenVersion": "7.2.1-SNAPSHOT",
+        "mavenVersion": "7.3.0",
         "packageName": "org.kurento.module.chroma"
       }
     },
